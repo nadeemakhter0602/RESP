@@ -82,7 +82,7 @@ class RESP {
         }
         // allocate Buffer object and store Bulk String bytes to it
         buffer = Buffer.alloc(bulkStringLength);
-        for (let i = 0; i <= bulkStringLength; i++) {
+        for (let i = 0; i < bulkStringLength; i++) {
             buffer.write(currentByte, i);
             currentByte = byteDataGenerator.next().value;
         }

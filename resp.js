@@ -99,9 +99,7 @@ class RESP {
         // check for CRLF at the end of Bulk String
         if (currentByte === this.CR) {
             currentByte = byteDataGenerator.next().value;
-            if (currentByte === this.LF) {
-                currentByte = byteDataGenerator.next().value;
-            } else {
+            if (currentByte !== this.LF) {
                 throw new Error("No CRLF at the end of Bulk String");
             }
         } else {

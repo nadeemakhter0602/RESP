@@ -45,6 +45,11 @@ class RESP {
         simpleString = [];
         while (currentByte !== this.CR) {
             simpleString.push(currentByte);
+            currentByte = byteDataGenerator.next().value;
+        }
+        currentByte = byteDataGenerator.next().value;
+        if (currentByte !== this.LF) {
+            throw new Error("No CRLF at the end of Simple String");
         }
         return Buffer.from(simpleString).toString();
     }
@@ -58,6 +63,11 @@ class RESP {
         integer = 0;
         while (currentByte !== this.CR) {
             integer = integer * 10 + (currentByte - 48);
+            currentByte = byteDataGenerator.next().value;
+        }
+        currentByte = byteDataGenerator.next().value;
+        if (currentByte !== this.LF) {
+            throw new Error("No CRLF at the end of Integer");
         }
         return integer;
     }
@@ -86,16 +96,16 @@ class RESP {
             buffer.write(currentByte, i);
             currentByte = byteDataGenerator.next().value;
         }
-        // check for CRLF in the end of Bulk String
+        // check for CRLF at the end of Bulk String
         if (currentByte === this.CR) {
             currentByte = byteDataGenerator.next().value;
             if (currentByte === this.LF) {
                 currentByte = byteDataGenerator.next().value;
             } else {
-                throw new Error("No CRLF in the end of Bulk String");
+                throw new Error("No CRLF at the end of Bulk String");
             }
         } else {
-            throw new Error("No CRLF in the end of Bulk String");
+            throw new Error("No CRLF at the end of Bulk String");
         }
         // return final Buffer object
         return buffer;

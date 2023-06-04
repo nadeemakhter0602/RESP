@@ -19,3 +19,9 @@ test("Decode Integer", () => {
     buffer = Buffer.from(":1000\r\n");
     assert.strictEqual(respDecoder.decode(buffer), 1000);
 });
+
+test("Decode Bulk String", () => {
+    respDecoder = new resp.RESP();
+    buffer = Buffer.from("$5\r\nhello\r\n");
+    assert.deepStrictEqual(respDecoder.decode(buffer), Buffer.from("hello"));
+});

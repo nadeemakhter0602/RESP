@@ -53,7 +53,14 @@ class RESP {
         return this.decodeSimpleString(byteDataGenerator);
     }
 
-    decodeInteger(byteDataGenerator) {}
+    decodeInteger(byteDataGenerator) {
+        currentByte = byteDataGenerator.next().value;
+        integer = 0;
+        while (currentByte !== this.CR) {
+            integer = integer * 10 + (currentByte - 48);
+        }
+        return integer;
+    }
 
     decodeBulkString(byteDataGenerator) {}
 

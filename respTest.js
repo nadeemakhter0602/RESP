@@ -13,3 +13,9 @@ test("Decode Error", (t) => {
     buffer = Buffer.from("-Error message\r\n");
     assert.strictEqual(respDecoder.decode(buffer), "Error message");
 });
+
+test("Decode Integer", (t) => {
+    respDecoder = new resp.RESP();
+    buffer = Buffer.from(":1000\r\n");
+    assert.strictEqual(respDecoder.decode(buffer), 1000);
+});

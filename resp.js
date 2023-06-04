@@ -87,7 +87,7 @@ class RESP {
         // allocate Buffer object and store Bulk String bytes to it
         const buffer = Buffer.alloc(bulkStringLength);
         for (let i = 0; i < bulkStringLength; i++) {
-            buffer.write(currentByte, i);
+            buffer.writeUInt8(currentByte, i);
             currentByte = byteDataGenerator.next().value;
         }
         // check for CRLF at the end of Bulk String

@@ -124,3 +124,7 @@ class RESP {
         return array;
     }
 }
+
+module.exports = {
+    RESP,
+};

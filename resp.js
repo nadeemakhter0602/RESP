@@ -1,5 +1,3 @@
-const Buffer = require("node:buffer");
-
 class RESP {
     constructor() {
         this.simpleStringStart = 43;
@@ -18,12 +16,12 @@ class RESP {
     }
 
     decode(byteArray) {
-        byteDataGenerator = this.byteGenerator(byteArray);
+        const byteDataGenerator = this.byteGenerator(byteArray);
         return this.decodeByteGenerator(byteDataGenerator);
     }
 
     decodeByteGenerator(byteDataGenerator) {
-        currentByte = byteDataGenerator.next().value;
+        const currentByte = byteDataGenerator.next().value;
         if (currentByte == this.simpleStringStart) {
             return this.decodeSimpleString(byteDataGenerator);
         } else if (currentByte == this.errorStart) {
@@ -37,8 +35,8 @@ class RESP {
     }
 
     decodeSimpleString(byteDataGenerator) {
-        currentByte = byteDataGenerator.next().value;
-        simpleString = [];
+        let currentByte = byteDataGenerator.next().value;
+        const simpleString = [];
         while (currentByte !== this.CR) {
             simpleString.push(currentByte);
             currentByte = byteDataGenerator.next().value;
@@ -55,8 +53,8 @@ class RESP {
     }
 
     decodeInteger(byteDataGenerator) {
-        currentByte = byteDataGenerator.next().value;
-        integer = 0;
+        let currentByte = byteDataGenerator.next().value;
+        let integer = 0;
         while (currentByte !== this.CR) {
             integer = integer * 10 + (currentByte - 48);
             currentByte = byteDataGenerator.next().value;
@@ -69,12 +67,12 @@ class RESP {
     }
 
     decodeBulkString(byteDataGenerator) {
-        bulkStringLength = byteDataGenerator.next().value - 48;
+        const bulkStringLength = byteDataGenerator.next().value - 48;
         // return null if length of Bulk String is -1 (Null Bulk String)
         if (bulkStringLength === -1) {
             return null;
         }
-        currentByte = byteDataGenerator.next().value;
+        let currentByte = byteDataGenerator.next().value;
         // check for CRLF in the beginning of Bulk String
         if (currentByte === this.CR) {
             currentByte = byteDataGenerator.next().value;
@@ -87,7 +85,7 @@ class RESP {
             throw new Error("No CRLF in the beginning of Bulk String");
         }
         // allocate Buffer object and store Bulk String bytes to it
-        buffer = Buffer.alloc(bulkStringLength);
+        const buffer = Buffer.alloc(bulkStringLength);
         for (let i = 0; i < bulkStringLength; i++) {
             buffer.write(currentByte, i);
             currentByte = byteDataGenerator.next().value;
@@ -106,7 +104,8 @@ class RESP {
     }
 
     decodeArray(byteDataGenerator) {
-        arrayLength = byteDataGenerator.next().value - 48;
+        const arrayLength = byteDataGenerator.next().value - 48;
+        let currentByte = byteDataGenerator.next().value;
         // check for CRLF in the beginning of Array
         if (currentByte === this.CR) {
             currentByte = byteDataGenerator.next().value;
@@ -116,7 +115,7 @@ class RESP {
         } else {
             throw new Error("No CRLF in the beginning of Array");
         }
-        array = [];
+        const array = [];
         // decode elements and push to array
         for (let i = 0; i < arrayLength; i++) {
             array.push(this.decodeByteGenerator(byteDataGenerator));

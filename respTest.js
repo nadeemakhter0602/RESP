@@ -25,3 +25,10 @@ test("Decode Bulk String", () => {
     buffer = Buffer.from("$5\r\nhello\r\n");
     assert.deepStrictEqual(respDecoder.decode(buffer), Buffer.from("hello"));
 });
+
+test("Decode Array with Mixed Types", () => {
+    respDecoder = new resp.RESP();
+    buffer = Buffer.from("*5\r\n:1\r\n:2\r\n:3\r\n:4\r\n$5\r\nhello\r\n");
+    const expected = [1, 2, 3, 4, Buffer.from("hello")];
+    assert.deepStrictEqual(respDecoder.decode(buffer), expected);
+});

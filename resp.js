@@ -22,12 +22,8 @@ class RESP {
         return this.decodeByteGenerator(byteDataGenerator);
     }
 
-    decodeByteGenerator(byteDataGenerator, currentByte = null) {
-        if (!currentByte) {
-            currentByte = byteDataGenerator.next().value;
-        } else {
-            currentByte = currentByte;
-        }
+    decodeByteGenerator(byteDataGenerator) {
+        currentByte = byteDataGenerator.next().value;
         if (currentByte == this.simpleStringStart) {
             return this.decodeSimpleString(byteDataGenerator);
         } else if (currentByte == this.errorStart) {
@@ -109,5 +105,22 @@ class RESP {
         return buffer;
     }
 
-    decodeArray(byteDataGenerator) {}
+    decodeArray(byteDataGenerator) {
+        arrayLength = byteDataGenerator.next().value - 48;
+        // check for CRLF in the beginning of Array
+        if (currentByte === this.CR) {
+            currentByte = byteDataGenerator.next().value;
+            if (currentByte !== this.LF) {
+                throw new Error("No CRLF in the beginning of Array");
+            }
+        } else {
+            throw new Error("No CRLF in the beginning of Array");
+        }
+        array = [];
+        // decode elements and push to array
+        for (let i = 0; i < arrayLength; i++) {
+            array.push(this.decodeByteGenerator(byteDataGenerator));
+        }
+        return array;
+    }
 }

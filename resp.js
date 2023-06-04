@@ -62,7 +62,44 @@ class RESP {
         return integer;
     }
 
-    decodeBulkString(byteDataGenerator) {}
+    decodeBulkString(byteDataGenerator) {
+        bulkStringLength = byteDataGenerator.next().value - 48;
+        // return null if length of Bulk String is -1 (Null Bulk String)
+        if (bulkStringLength === -1) {
+            return null;
+        }
+        currentByte = byteDataGenerator.next().value;
+        // check for CRLF in the beginning of Bulk String
+        if (currentByte === this.CR) {
+            currentByte = byteDataGenerator.next().value;
+            if (currentByte === this.LF) {
+                currentByte = byteDataGenerator.next().value;
+            } else {
+                throw new Error("No CRLF in the beginning of Bulk String");
+            }
+        } else {
+            throw new Error("No CRLF in the beginning of Bulk String");
+        }
+        // allocate buffer and store Bulk String bytes to it
+        buffer = Buffer.alloc(bulkStringLength);
+        for (let i = 0; i <= bulkStringLength; i++) {
+            buffer.write(currentByte, i);
+            currentByte = byteDataGenerator.next().value;
+        }
+        // check for CRLF in the end of Bulk String
+        if (currentByte === this.CR) {
+            currentByte = byteDataGenerator.next().value;
+            if (currentByte === this.LF) {
+                currentByte = byteDataGenerator.next().value;
+            } else {
+                throw new Error("No CRLF in the end of Bulk String");
+            }
+        } else {
+            throw new Error("No CRLF in the end of Bulk String");
+        }
+        // return final Buffer object
+        return buffer;
+    }
 
     decodeArray(byteDataGenerator) {}
 }

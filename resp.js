@@ -1,14 +1,14 @@
-const {
-    Buffer
-} = require("node:buffer");
+const Buffer = require("node:buffer");
 
 class RESP {
     constructor() {
-        this.simpleStringStart = Buffer.from("+").readUInt8(0);
-        this.errorStart = Buffer.from("-").readUInt8(0);
-        this.integerStart = Buffer.from(":").readUInt8(0);
-        this.bulkStringStart = Buffer.from("$").readUInt8(0);
-        this.arrayStart = Buffer.from("*").readUInt8(0);
+        this.simpleStringStart = 43;
+        this.errorStart = 45;
+        this.integerStart = 58;
+        this.bulkStringStart = 36;
+        this.arrayStart = 42;
+        this.CR = 13;
+        this.LF = 10;
     }
 
     * byteGenerator(byteArray) {
@@ -40,9 +40,18 @@ class RESP {
         return this.decodeArray(byteDataGenerator);
     }
 
-    decodeSimpleString(byteDataGenerator) {}
+    decodeSimpleString(byteDataGenerator) {
+        currentByte = byteDataGenerator.next().value;
+        simpleString = [];
+        while (currentByte !== this.CR) {
+            simpleString.push(currentByte);
+        }
+        return Buffer.from(simpleString).toString();
+    }
 
-    decodeError(byteDataGenerator) {}
+    decodeError(byteDataGenerator) {
+        return this.decodeSimpleString(byteDataGenerator);
+    }
 
     decodeInteger(byteDataGenerator) {}
 

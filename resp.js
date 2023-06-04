@@ -80,7 +80,7 @@ class RESP {
         } else {
             throw new Error("No CRLF in the beginning of Bulk String");
         }
-        // allocate buffer and store Bulk String bytes to it
+        // allocate Buffer object and store Bulk String bytes to it
         buffer = Buffer.alloc(bulkStringLength);
         for (let i = 0; i <= bulkStringLength; i++) {
             buffer.write(currentByte, i);

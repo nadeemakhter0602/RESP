@@ -32,3 +32,13 @@ test("Decode Array with Mixed Types", () => {
     const expected = [1, 2, 3, 4, Buffer.from("hello")];
     assert.deepStrictEqual(respDecoder.decode(buffer), expected);
 });
+
+test("Decode Nested Array", () => {
+    respDecoder = new resp.RESP();
+    buffer = Buffer.from("*2\r\n*3\r\n:1\r\n:2\r\n:3\r\n*2\r\n+Hello\r\n-World\r\n");
+    const expected = [
+        [1, 2, 3],
+        ['Hello', 'World']
+    ];
+    assert.deepStrictEqual(respDecoder.decode(buffer), expected);
+});

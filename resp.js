@@ -76,7 +76,7 @@ class RESP {
 
     decodeBulkString(byteDataGenerator) {
         const bulkStringLength = this.decodeInteger(byteDataGenerator);
-        // return null if length of Bulk String is -1 (Null Bulk String)
+        // return null if length of Bulk String is -1 (Null Object)
         if (bulkStringLength === -1) {
             return null;
         }
@@ -102,6 +102,10 @@ class RESP {
 
     decodeArray(byteDataGenerator) {
         const arrayLength = this.decodeInteger(byteDataGenerator);
+        // return null if length of Array is -1 (Null Object)
+        if (arrayLength === -1) {
+            return null;
+        }
         const array = [];
         // decode elements and push to array
         for (let i = 0; i < arrayLength; i++) {

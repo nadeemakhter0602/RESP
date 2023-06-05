@@ -85,3 +85,10 @@ test("Decode Array with null value and size -1", () => {
     buffer = Buffer.from("*-1\r\n");
     assert.deepStrictEqual(respDecoder.decode(buffer), null);
 });
+
+test("Decode Array with size greater than 9", () => {
+    respDecoder = new resp.RESP();
+    buffer = Buffer.from("*10\r\n:1\r\n:2\r\n:3\r\n:4\r\n:5\r\n:6\r\n:7\r\n:8\r\n:9\r\n:10\r\n");
+    const expected = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    assert.deepStrictEqual(respDecoder.decode(buffer), expected);
+});

@@ -20,6 +20,12 @@ test("Decode Integer", () => {
     assert.strictEqual(respDecoder.decode(buffer), 1000);
 });
 
+test("Decode Integer Zero", () => {
+    respDecoder = new resp.RESP();
+    buffer = Buffer.from(":0\r\n");
+    assert.strictEqual(respDecoder.decode(buffer), 0);
+});
+
 test("Decode Negative Integer", () => {
     respDecoder = new resp.RESP();
     buffer = Buffer.from(":-1000\r\n");

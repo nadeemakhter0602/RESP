@@ -79,3 +79,9 @@ test("Decode Array with null element", () => {
     const expected = [Buffer.from("hello"), null, Buffer.from("world")];
     assert.deepStrictEqual(respDecoder.decode(buffer), expected);
 });
+
+test("Decode Array with null value and size -1", () => {
+    respDecoder = new resp.RESP();
+    buffer = Buffer.from("*-1\r\n");
+    assert.deepStrictEqual(respDecoder.decode(buffer), null);
+});

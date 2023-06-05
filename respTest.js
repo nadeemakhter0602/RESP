@@ -20,6 +20,18 @@ test("Decode Integer", () => {
     assert.strictEqual(respDecoder.decode(buffer), 1000);
 });
 
+test("Decode Negative Integer", () => {
+    respDecoder = new resp.RESP();
+    buffer = Buffer.from(":-1000\r\n");
+    assert.strictEqual(respDecoder.decode(buffer), -1000);
+});
+
+test("Decode Positive Signed Integer", () => {
+    respDecoder = new resp.RESP();
+    buffer = Buffer.from(":+1000\r\n");
+    assert.strictEqual(respDecoder.decode(buffer), 1000);
+});
+
 test("Decode Bulk String", () => {
     respDecoder = new resp.RESP();
     buffer = Buffer.from("$5\r\nhello\r\n");

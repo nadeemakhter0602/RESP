@@ -55,6 +55,14 @@ class RESP {
     decodeInteger(byteDataGenerator) {
         let currentByte = byteDataGenerator.next().value;
         let integer = 0;
+        let sign = 1;
+        // check beginning of Integer for plus or minus sign
+        if (currentByte === 45) {
+            sign = -1;
+            currentByte = byteDataGenerator.next().value;
+        } else if (currentByte === 43) {
+            currentByte = byteDataGenerator.next().value;
+        }
         while (currentByte !== this.CR) {
             integer = integer * 10 + (currentByte - 48);
             currentByte = byteDataGenerator.next().value;
@@ -63,7 +71,7 @@ class RESP {
         if (currentByte !== this.LF) {
             throw new Error("No CRLF at the end of Integer");
         }
-        return integer;
+        return integer * sign;
     }
 
     decodeBulkString(byteDataGenerator) {

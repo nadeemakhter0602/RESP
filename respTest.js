@@ -50,6 +50,12 @@ test("Decode Bulk String with size 0", () => {
     assert.deepStrictEqual(respDecoder.decode(buffer), Buffer.from(""));
 });
 
+test("Decode Bulk String with null value and size -1", () => {
+    respDecoder = new resp.RESP();
+    buffer = Buffer.from("$-1\r\n");
+    assert.strictEqual(respDecoder.decode(buffer), null);
+});
+
 test("Decode Array with Mixed Types", () => {
     respDecoder = new resp.RESP();
     buffer = Buffer.from("*5\r\n:1\r\n:2\r\n:3\r\n:4\r\n$5\r\nhello\r\n");

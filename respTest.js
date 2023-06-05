@@ -72,3 +72,10 @@ test("Decode Nested Array", () => {
     ];
     assert.deepStrictEqual(respDecoder.decode(buffer), expected);
 });
+
+test("Decode Array with null element", () => {
+    respDecoder = new resp.RESP();
+    buffer = Buffer.from("*3\r\n$5\r\nhello\r\n$-1\r\n$5\r\nworld\r\n");
+    const expected = [Buffer.from("hello"), null, Buffer.from("world")];
+    assert.deepStrictEqual(respDecoder.decode(buffer), expected);
+});

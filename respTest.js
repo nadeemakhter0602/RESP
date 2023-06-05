@@ -44,6 +44,12 @@ test("Decode Bulk String with size greater than 9", () => {
     assert.deepStrictEqual(respDecoder.decode(buffer), Buffer.from("helloworld"));
 });
 
+test("Decode Bulk String with size 0", () => {
+    respDecoder = new resp.RESP();
+    buffer = Buffer.from("$0\r\n\r\n");
+    assert.deepStrictEqual(respDecoder.decode(buffer), Buffer.from(""));
+});
+
 test("Decode Array with Mixed Types", () => {
     respDecoder = new resp.RESP();
     buffer = Buffer.from("*5\r\n:1\r\n:2\r\n:3\r\n:4\r\n$5\r\nhello\r\n");

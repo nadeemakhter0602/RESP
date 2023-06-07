@@ -143,6 +143,22 @@ class RESP {
         buffer.writeUint8(this.LF, errorLength + 3);
         return buffer;
     }
+
+    encodeInteger(decodedObject) {
+        const integerString = decodedObject.toString();
+        const integerLength = integerString.length;
+        const buffer = Buffer.alloc(integerLength + 3);
+        // write '-' in the beginning of buffer
+        buffer.writeUint8(this.integerStart, 0);
+        // write characters of string to buffer
+        for (let i = 0; i < integerLength; i++) {
+            buffer.write(integerString[i], i + 1);
+        }
+        // write CRLF at the end of buffer
+        buffer.writeUint8(this.CR, integerLength + 2);
+        buffer.writeUint8(this.LF, integerLength + 3);
+        return buffer;
+    }
 }
 
 module.exports = {

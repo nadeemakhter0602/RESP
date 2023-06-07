@@ -113,6 +113,21 @@ class RESP {
         }
         return array;
     }
+
+    encodeSimpleString(decodedObject) {
+        const simpleStringLength = decodedObject.length;
+        const buffer = Buffer.alloc(simpleStringLength + 3);
+        // write '+' in the beginning of buffer
+        buffer.writeUint8(this.simpleStringStart, 0);
+        // write characters of string to buffer
+        for (let i = 0; i < simpleStringLength; i++) {
+            buffer.write(decodedObject[i], i + 1);
+        }
+        // write CRLF at the end of buffer
+        buffer.writeUint8(this.CR, simpleStringLength + 2);
+        buffer.writeUint8(this.LF, simpleStringLength + 3);
+        return buffer;
+    }
 }
 
 module.exports = {

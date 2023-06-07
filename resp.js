@@ -148,7 +148,7 @@ class RESP {
         const integerString = decodedObject.toString();
         const integerLength = integerString.length;
         const buffer = Buffer.alloc(integerLength + 3);
-        // write '-' in the beginning of buffer
+        // write ':' in the beginning of buffer
         buffer.writeUint8(this.integerStart, 0);
         // write characters of string to buffer
         for (let i = 0; i < integerLength; i++) {

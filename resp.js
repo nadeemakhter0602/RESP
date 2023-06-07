@@ -159,6 +159,26 @@ class RESP {
         buffer.writeUint8(this.LF, integerLength + 3);
         return buffer;
     }
+
+    encodeBulkString(decodedObject) {
+        const bulkStringLength = decodedObject.length;
+        const buffer = Buffer.alloc(bulkStringLength + 6);
+        // write '$' in the beginning of buffer
+        buffer.writeUint8(this.bulkStringStart, 0);
+        // write length of bulk string
+        buffer.writeUint8(this.bulkStringLength + 48, 1);
+        // write CRLF
+        buffer.writeUint8(this.CR, 2);
+        buffer.writeUint8(this.LF, 3);
+        // write characters of bulk string to buffer
+        for (let i = 0; i < bulkStringLength; i++) {
+            buffer.write(bulkStringString[i], i + 4);
+        }
+        // write CRLF at the end of buffer
+        buffer.writeUint8(this.CR, bulkStringLength + 5);
+        buffer.writeUint8(this.LF, bulkStringLength + 6);
+        return buffer;
+    }
 }
 
 module.exports = {

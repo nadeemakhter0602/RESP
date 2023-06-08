@@ -134,7 +134,6 @@ class RESP {
         buffer.write(bulkStringLength.toString(), offset);
         offset += lengthToStringLength;
         // write CRLF
-        offset += 1;
         buffer.writeUint8(this.CR, offset);
         offset += 1;
         buffer.writeUint8(this.LF, offset);
@@ -144,6 +143,7 @@ class RESP {
             buffer.writeUint8(decodedObject[i], offset);
         }
         // write CRLF at the end of buffer
+        offset += 1;
         buffer.writeUint8(this.CR, offset);
         offset += 1;
         buffer.writeUint8(this.LF, offset);

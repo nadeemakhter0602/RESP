@@ -105,3 +105,10 @@ test("Encode Bulk string", () => {
     const buffer = Buffer.from("hello");
     assert.deepStrictEqual(respEncoder.encode(buffer), expected);
 });
+
+test("Encode Bulk string with size greater than 9", () => {
+    respEncoder = new resp.RESP();
+    const expected = Buffer.from("$14\r\nabcdefghijklmn\r\n");
+    const buffer = Buffer.from("abcdefghijklmn");
+    assert.deepStrictEqual(respEncoder.encode(buffer), expected);
+});

@@ -124,21 +124,29 @@ class RESP {
 
     encodeBulkString(decodedObject) {
         const bulkStringLength = decodedObject.length;
+        const lengthToStringLength = bulkStringLength.toString().length;
         const buffer = Buffer.alloc(bulkStringLength + 6);
+        let offset = 0;
         // write '$' in the beginning of buffer
-        buffer.writeUint8(this.bulkStringStart, 0);
+        buffer.writeUint8(this.bulkStringStart, offset);
+        offset += 1;
         // write length of bulk string
-        buffer.writeUint8(this.bulkStringLength + 48, 1);
+        buffer.writeUint8(bulkStringLength.toString(), offset);
+        offset += lengthToStringLength;
         // write CRLF
-        buffer.writeUint8(this.CR, 2);
-        buffer.writeUint8(this.LF, 3);
+        offset += 2;
+        buffer.writeUint8(this.CR, offset);
+        offset += 3;
+        buffer.writeUint8(this.LF, offset);
         // write characters of bulk string to buffer
         for (let i = 0; i < bulkStringLength; i++) {
-            buffer.write(decodedObject[i], i + 4);
+            offset += i;
+            buffer.write(decodedObject[i], offset);
         }
         // write CRLF at the end of buffer
-        buffer.writeUint8(this.CR, bulkStringLength + 5);
-        buffer.writeUint8(this.LF, bulkStringLength + 6);
+        buffer.writeUint8(this.CR, offset);
+        offset += 1;
+        buffer.writeUint8(this.LF, offset);
         return buffer;
     }
 }

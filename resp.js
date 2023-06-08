@@ -114,6 +114,14 @@ class RESP {
         return array;
     }
 
+    encode(decodedObject) {
+        const decodedObjectType = Object.prototype.toString.call(decodedObject);
+        if (decodedObjectType === "[object Uint8Array]") {
+            return this.encodeBulkString(decodedObject);
+        }
+        return this.encodeArray(decodedObject);
+    }
+
     encodeBulkString(decodedObject) {
         const bulkStringLength = decodedObject.length;
         const buffer = Buffer.alloc(bulkStringLength + 6);

@@ -149,6 +149,30 @@ class RESP {
         buffer.writeUint8(this.LF, offset);
         return buffer;
     }
+
+    encodeArray(decodedObject) {
+        const arrayLength = decodedObject.length;
+        const lengthToStringLength = arrayLength.toString().length;
+        const bufferArray = [];
+        const buffer = Buffer.alloc(3 + lengthToStringLength);
+        let offset = 0;
+        // write '*' in the beginning of buffer
+        buffer.writeUint8(this.arrayStart, offset);
+        offset += 1;
+        // write length of array
+        buffer.write(arrayLength.toString(), offset);
+        offset += lengthToStringLength;
+        // write CRLF
+        offset += 1;
+        buffer.writeUint8(this.CR, offset);
+        offset += 1;
+        buffer.writeUint8(this.LF, offset);
+        bufferArray.push(buffer);
+        for (let i = 0; i < arrayLength; i++) {
+            bufferArray.push(this.encodeBulkString(decodedObject[i]));
+        }
+        return Buffer.concat(bufferArray);
+    }
 }
 
 module.exports = {

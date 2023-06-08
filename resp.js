@@ -126,7 +126,7 @@ class RESP {
         buffer.writeUint8(this.LF, 3);
         // write characters of bulk string to buffer
         for (let i = 0; i < bulkStringLength; i++) {
-            buffer.write(bulkStringString[i], i + 4);
+            buffer.write(decodedObject[i], i + 4);
         }
         // write CRLF at the end of buffer
         buffer.writeUint8(this.CR, bulkStringLength + 5);

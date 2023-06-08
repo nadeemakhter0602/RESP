@@ -163,7 +163,6 @@ class RESP {
         buffer.write(arrayLength.toString(), offset);
         offset += lengthToStringLength;
         // write CRLF
-        offset += 1;
         buffer.writeUint8(this.CR, offset);
         offset += 1;
         buffer.writeUint8(this.LF, offset);

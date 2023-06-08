@@ -141,7 +141,7 @@ class RESP {
         // write characters of bulk string to buffer
         for (let i = 0; i < bulkStringLength; i++) {
             offset += 1;
-            buffer.write(decodedObject[i], offset);
+            buffer.writeUint8(decodedObject[i], offset);
         }
         // write CRLF at the end of buffer
         buffer.writeUint8(this.CR, offset);

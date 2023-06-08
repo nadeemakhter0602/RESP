@@ -131,7 +131,7 @@ class RESP {
         buffer.writeUint8(this.bulkStringStart, offset);
         offset += 1;
         // write length of bulk string
-        buffer.writeUint8(bulkStringLength.toString(), offset);
+        buffer.write(bulkStringLength.toString(), offset);
         offset += lengthToStringLength;
         // write CRLF
         offset += 2;

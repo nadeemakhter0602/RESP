@@ -98,3 +98,10 @@ test("Decode Array with size greater than 9", () => {
     const expected = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     assert.deepStrictEqual(respDecoder.decode(buffer), expected);
 });
+
+test("Encode Bulk string", () => {
+    respEncoder = new resp.RESP();
+    const expected = Buffer.from("$5\r\nhello\r\n");
+    const buffer = Buffer.from("hello");
+    assert.deepStrictEqual(respEncoder.encode(buffer), expected);
+});

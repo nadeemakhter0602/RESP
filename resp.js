@@ -114,52 +114,6 @@ class RESP {
         return array;
     }
 
-    encodeSimpleString(decodedObject) {
-        const simpleStringLength = decodedObject.length;
-        const buffer = Buffer.alloc(simpleStringLength + 3);
-        // write '+' in the beginning of buffer
-        buffer.writeUint8(this.simpleStringStart, 0);
-        // write characters of string to buffer
-        for (let i = 0; i < simpleStringLength; i++) {
-            buffer.write(decodedObject[i], i + 1);
-        }
-        // write CRLF at the end of buffer
-        buffer.writeUint8(this.CR, simpleStringLength + 2);
-        buffer.writeUint8(this.LF, simpleStringLength + 3);
-        return buffer;
-    }
-
-    encodeError(decodedObject) {
-        const errorLength = decodedObject.length;
-        const buffer = Buffer.alloc(errorLength + 3);
-        // write '-' in the beginning of buffer
-        buffer.writeUint8(this.errorStart, 0);
-        // write characters of string to buffer
-        for (let i = 0; i < errorLength; i++) {
-            buffer.write(decodedObject[i], i + 1);
-        }
-        // write CRLF at the end of buffer
-        buffer.writeUint8(this.CR, errorLength + 2);
-        buffer.writeUint8(this.LF, errorLength + 3);
-        return buffer;
-    }
-
-    encodeInteger(decodedObject) {
-        const integerString = decodedObject.toString();
-        const integerLength = integerString.length;
-        const buffer = Buffer.alloc(integerLength + 3);
-        // write ':' in the beginning of buffer
-        buffer.writeUint8(this.integerStart, 0);
-        // write characters of string to buffer
-        for (let i = 0; i < integerLength; i++) {
-            buffer.write(integerString[i], i + 1);
-        }
-        // write CRLF at the end of buffer
-        buffer.writeUint8(this.CR, integerLength + 2);
-        buffer.writeUint8(this.LF, integerLength + 3);
-        return buffer;
-    }
-
     encodeBulkString(decodedObject) {
         const bulkStringLength = decodedObject.length;
         const buffer = Buffer.alloc(bulkStringLength + 6);

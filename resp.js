@@ -125,7 +125,7 @@ class RESP {
     encodeBulkString(decodedObject) {
         const bulkStringLength = decodedObject.length;
         const lengthToStringLength = bulkStringLength.toString().length;
-        const buffer = Buffer.alloc(bulkStringLength + 6);
+        const buffer = Buffer.alloc(bulkStringLength + 5 + lengthToStringLength);
         let offset = 0;
         // write '$' in the beginning of buffer
         buffer.writeUint8(this.bulkStringStart, offset);

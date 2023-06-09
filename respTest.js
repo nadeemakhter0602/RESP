@@ -1,6 +1,6 @@
 const test = require("node:test");
 const assert = require("assert");
-const resp = require('./resp');
+const resp = require("./resp");
 
 test("Decode Simple String", () => {
     respDecoder = new resp.RESP();
@@ -71,10 +71,12 @@ test("Decode Array with Mixed Types", () => {
 
 test("Decode Nested Array", () => {
     respDecoder = new resp.RESP();
-    buffer = Buffer.from("*2\r\n*3\r\n:1\r\n:2\r\n:3\r\n*2\r\n+Hello\r\n-World\r\n");
+    buffer = Buffer.from(
+        "*2\r\n*3\r\n:1\r\n:2\r\n:3\r\n*2\r\n+Hello\r\n-World\r\n"
+    );
     const expected = [
         [1, 2, 3],
-        ['Hello', 'World']
+        ["Hello", "World"],
     ];
     assert.deepStrictEqual(respDecoder.decode(buffer), expected);
 });
@@ -94,7 +96,9 @@ test("Decode Array with null value and size -1", () => {
 
 test("Decode Array with size greater than 9", () => {
     respDecoder = new resp.RESP();
-    buffer = Buffer.from("*10\r\n:1\r\n:2\r\n:3\r\n:4\r\n:5\r\n:6\r\n:7\r\n:8\r\n:9\r\n:10\r\n");
+    buffer = Buffer.from(
+        "*10\r\n:1\r\n:2\r\n:3\r\n:4\r\n:5\r\n:6\r\n:7\r\n:8\r\n:9\r\n:10\r\n"
+    );
     const expected = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     assert.deepStrictEqual(respDecoder.decode(buffer), expected);
 });
@@ -115,7 +119,33 @@ test("Encode Bulk string with size greater than 9", () => {
 
 test("Encode Array consisting of only Bulk Strings", () => {
     respEncoder = new resp.RESP();
-    const expected = Buffer.from("*3\r\n$5\r\nhello\r\n$5\r\nhello\r\n$5\r\nhello\r\n");
-    const buffer = [Buffer.from("hello"), Buffer.from("hello"), Buffer.from("hello")];
+    const expected = Buffer.from(
+        "*3\r\n$5\r\nhello\r\n$5\r\nhello\r\n$5\r\nhello\r\n"
+    );
+    const buffer = [
+        Buffer.from("hello"),
+        Buffer.from("hello"),
+        Buffer.from("hello"),
+    ];
+    assert.deepStrictEqual(respEncoder.encode(buffer), expected);
+});
+
+test("Encode Array consisting of only Bulk Strings with size greater than 9", () => {
+    respEncoder = new resp.RESP();
+    const expected = Buffer.from(
+        "*10\r\n$1\r\na\r\n$2\r\nab\r\n$1\r\na\r\n$2\r\nab\r\n$1\r\na\r\n$2\r\nab\r\n$1\r\na\r\n$2\r\nab\r\n$1\r\na\r\n$2\r\nab\r\n"
+    );
+    const buffer = [
+        Buffer.from("a"),
+        Buffer.from("ab"),
+        Buffer.from("a"),
+        Buffer.from("ab"),
+        Buffer.from("a"),
+        Buffer.from("ab"),
+        Buffer.from("a"),
+        Buffer.from("ab"),
+        Buffer.from("a"),
+        Buffer.from("ab"),
+    ];
     assert.deepStrictEqual(respEncoder.encode(buffer), expected);
 });

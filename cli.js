@@ -1,12 +1,11 @@
 const net = require("net");
 const readline = require("readline");
 const resp = require("./resp");
-
+// create readline input and output interface
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
 });
-
 // exit if enough arguments are not provided
 if (process.argv.length < 4) {
     console.log("Not enough arguments provided.");

@@ -29,7 +29,7 @@ function enterCommand(query) {
 async function cli() {
     const RESP = new resp.RESP();
     while (true) {
-        const command = await enterCommand("$");
+        let command = await enterCommand("$");
         command = command.split(" ");
         commandArray = [];
         for (let i = 0; i < command.length; i++) {

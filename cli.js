@@ -39,7 +39,7 @@ function sendAndRecieve(socket, commandRESPEncoded) {
 async function cli() {
     const RESP = new resp.RESP();
     while (true) {
-        let command = await enterCommand("~$ ");
+        let command = await enterCommand("redis> ");
         command = command.split(" ");
         commandArray = []; 
         for (let i = 0; i < command.length; i++) {

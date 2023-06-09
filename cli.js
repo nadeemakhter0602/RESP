@@ -25,22 +25,30 @@ function enterCommand(query) {
         })
     );
 }
+// function to send and receive data to and from socket
+function sendAndRecieve(socket, commandRESPEncoded) {
+    return new Promise((resolve) => {
+        socket.write(commandRESPEncoded, () => {
+            socket.on("data", (data) => {
+                resolve(data);
+            });
+        });
+    });
+}
 // function implementing command-line loop
 async function cli() {
     const RESP = new resp.RESP();
     while (true) {
         let command = await enterCommand("~$ ");
         command = command.split(" ");
-        commandArray = [];
+        commandArray = []; 
         for (let i = 0; i < command.length; i++) {
             commandArray.push(Buffer.from(command[i]));
         }
         const commandRESPEncoded = RESP.encode(commandArray);
-        socket.write(commandRESPEncoded);
-        socket.on("data", (data) => {
-            const commandRESPDecoded = RESP.decode(data);
-            console.log(commandRESPDecoded.toString());
-        });
+        data = await sendAndRecieve(socket, commandRESPEncoded);
+        const commandRESPDecoded = RESP.decode(data);
+        console.log(commandRESPDecoded.toString());
     }
 }
 // start command-line loop

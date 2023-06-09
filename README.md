@@ -2,7 +2,7 @@
 
 Implementation of certain parts of the Redis serialization protocol (RESP) specification.
 
-* Implemented RESP encoding and decoding.
+* Implemented RESP parsing, encoding and decoding with unit tests.
 * Implemented a simple redis client command-line utility.
 
 ```

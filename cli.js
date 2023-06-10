@@ -40,7 +40,7 @@ async function cli() {
     while (true) {
         let command = await enterCommand("redis> ");
         command = command.split(" ");
-        commandArray = []; 
+        commandArray = [];
         for (let i = 0; i < command.length; i++) {
             commandArray.push(Buffer.from(command[i]));
         }
